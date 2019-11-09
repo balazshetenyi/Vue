@@ -20,7 +20,7 @@
 
       <section class="menu">
         <h2>Menu</h2>
-        <div v-for="item in simpleMenu" class="menu-item">
+        <div v-for="item in simpleMenu" :key="item.name" class="menu-item">
           <img
             class="menu-item__image"
             :src="item.image.source"
@@ -29,11 +29,15 @@
           <div>
             <h3>{{ item.name }}</h3>
             <p v-if="item.inStock">In Stock</p>
-            <p v-if="!item.inStock">Out of Stock</p>
+            <p v-else>Out of Stock</p>
             <div>
-              <label for="add-item-quantity">Quantity:</label>
-              <input id="add-item-quantity" type="number" />
-              <button @click="addToShoppingCart">Add to Shopping Cart</button>
+              <label for="add-item-quantity">Quantity: {{ item.quantity }}</label>
+              <input 
+                id="add-item-quantity"
+                v-model.number="item.quantity"
+                type="number" 
+              />
+              <button @click="addToShoppingCart(item.quantity)">Add to Shopping Cart</button>
             </div>
           </div>
         </div>
@@ -85,7 +89,7 @@
                 alt: 'Four French Baguettes'
               },
               inStock: true,
-              quantity: 1
+              quantity: 5
             },
             {
               name: 'Éclair',
@@ -107,7 +111,8 @@
           }
         },
         methods: {
-          addToShoppingCart() {
+          addToShoppingCart(amount) {
+            this.shoppingCart += amount
           }
         }
       })
